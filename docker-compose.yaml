@@ -1,0 +1,60 @@
+version: '2'
+
+networks:
+ app-tier:
+    driver: bridge
+
+services:
+  backend:
+    build:       
+      context: ./Cassandra
+      dockerfile: Dockerfile 
+    environment:
+      - CASSANDRA_SEEDS=cassandra1,cassandra2,cassandra3
+      - CASSANDRA_PASSWORD=cassandra
+      - CASSANDRA_USER=cassandra
+    networks:
+      - app-tier
+    depends_on:
+      - cassandra1
+      - cassandra2
+      - cassandra3
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Casssandra/index.js:/app/index.js
+  cassandra1:
+    image: bitnami/cassandra:4.0.4
+    volumes:
+      - ./Cassandra:/docker-entrypoint-initdb.d
+    environment:
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_USER=cassandra
+      - CASSANDRA_SEEDS=cassandra1,cassandra2,cassandra3
+      - CASSANDRA_PASSWORD=cassandra
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+    networks:
+      - app-tier
+
+  cassandra2:
+    image: bitnami/cassandra:4.0.4
+    environment:
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_USER=cassandra
+      - CASSANDRA_PASSWORD=cassandra
+      - CASSANDRA_SEEDS=cassandra1,cassandra2,cassandra3
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+    networks:
+      - app-tier
+
+  cassandra3:
+    image: bitnami/cassandra:4.0.4
+    environment:
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_SEEDS=cassandra1,cassandra2,cassandra3
+      - CASSANDRA_USER=cassandra
+      - CASSANDRA_PASSWORD=cassandra
+    networks:
+      - app-tier
+
