@@ -47,3 +47,4 @@ podría seguir para ordenar los datos.
     verticalmente, sin embargo para este caso en particular se debe hacer más enfoque en la replicación de los nodos dentro 
     del cluster haciendo replicas de cada nodo según su funcionalidad dando así una tolerancia a fallos al sistema y homogeneidad
     a los datos, tomando en cuenta que la estrategía que se recomendó para esta ocasión fue la de "SympleStrategy"
+    
