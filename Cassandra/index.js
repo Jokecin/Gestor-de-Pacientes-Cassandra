@@ -37,12 +37,9 @@ app.post('/create', async(req, res) => {
         console.log(response.rows[0]);
         if (response.rows[0] != undefined) {
             console.log("existe el paciente")
-            //const query4 = `INSERT INTO recetas (id, id_paciente, comentario, farmacos, doctor) VALUES(${id2}, ${id1}, ${req.body.comentario}, ${req.body.farmacos}, ${req.body.doctor})`;
             client2.execute(`INSERT INTO recetas (id, id_paciente, comentario, farmacos, doctor) VALUES(${id2}, ${id1}, '${req.body.comentario}', '${req.body.farmacos}', '${req.body.doctor}');`);
         } else {
             console.log("No existe el paciente")
-            //const query2 = `INSERT INTO pacientes (id,nombre,apellido,rut,email,fecha_nacimiento) VALUES (${id1},${req.body.nombre},${req.body.apellido},${req.body.rut},${req.body.email},${req.body.fecha_nacimiento})`;
-            //const query3 = `INSERT INTO recetas (id, id_paciente, comentario, farmacos, doctor) VALUES(${id2}, ${id1}, ${req.body.comentario}, ${req.body.farmacos}, ${req.body.doctor})`;
             client.execute(`INSERT INTO pacientes(id,nombre,apellido,rut,email,fecha_nacimiento) VALUES (${id1},'${req.body.nombre}','${req.body.apellido}','${req.body.rut}','${req.body.email}','${req.body.fecha_nacimiento}');`);
             client2.execute(`INSERT INTO recetas(id, id_paciente, comentario, farmacos, doctor) VALUES(${id2}, ${id1}, '${req.body.comentario}', '${req.body.farmacos}', '${req.body.doctor}');`);
         }
