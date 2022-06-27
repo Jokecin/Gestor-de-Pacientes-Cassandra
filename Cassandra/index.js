@@ -50,20 +50,16 @@ app.post('/create', async(req, res) => {
 
 app.post('/edit', async(req, res) => {
   console.log(req.body)
-  res.send('hello world');
-
-  const query = `UPDATE recetas SET comentario = ${req.body.comentario}, farmacos = ${req.body.farmacos}, doctor = ${req.body.doctor} WHERE id=${req.body.id};`;
-
-  client2.execute(`SELECT * FROM recetas WHERE id = ${req.body.rut} ALLOW FILTERING`).then(response => {
+  client2.execute(`SELECT * FROM recetas WHERE id=${req.body.id} ALLOW FILTERING;`).then(response => {
       if (response.rows[0] != undefined) {
-          client2.execute(query);
+          client2.execute(`UPDATE recetas SET comentario = '${req.body.comentario}', farmacos = '${req.body.farmacos}', doctor = '${req.body.doctor}' WHERE id=${req.body.id};`);
+          res.send("Receta editada");
       } else {
-          res.json("Receta no encontrada");
+          res.send("Receta no encontrada");
       }
   }).catch(err => {
       console.log(err);
   });
-
 })
 
 app.post('/delete', async(req, res) => {
