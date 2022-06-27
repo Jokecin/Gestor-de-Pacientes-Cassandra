@@ -29,8 +29,6 @@ app.post('/create', async(req, res) => {
   
   console.log(req.body)
   res.send('hello world');
-    //const query2 = `INSERT INTO pacientes (id,nombre,apellido,rut,email,fecha_nacimiento) VALUES (${id1},${req.body.nombre},${req.body.apellido},${req.body.rut},${req.body.email},${req.body.fecha_nacimiento});`;
-    
     var id1 = uuidv4();
     var id2 = uuidv4();
     await client.execute(`SELECT * FROM pacientes WHERE rut='${req.body.rut}' ALLOW FILTERING`).then(response => {
