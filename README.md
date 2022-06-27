@@ -23,10 +23,7 @@
 
     La arquitectura empleada por Cassandra corresponde a la peer to peer conectado en forma de anillo de forma que se distribuyen los datos de una forma 
     homogénea con la ayuda de un balanceador de carga, haciendola tolerante a fallos, además estos nodos se comunican a través de sus vecinos mediante el uso 
-    del protocolo Gossip. Cuando un cliente ejerce una petición a un nodo, este actúa como coordinador de dicha petición para poder ejecutarla, si este nodo en
-    especifico se desconecta cassandra asigna otro nodo dentro del cluster como coordinador para esta misma consulta, de forma que la petición tenga una 
-    respuesta a pesar del fallo del nodo. Dado el protocolo mencionado, los fallos que pueden haber en la red son detectados además de dejar ciertos componentes en
-    un estado pendiente para darle mejor consistencia al sistema y así obtener buenos resultados
+    del protocolo Gossip, por lo cual suele ser eficiente. Cuando un cliente ejerce una petición a un nodo, este actúa como coordinador de dicha petición para poder       ejecutarla, si este nodo en especifico se desconecta cassandra asigna otro nodo dentro del cluster como coordinador para esta misma consulta, de forma que la           petición tenga una respuesta a pesar del fallo del nodo. Dado el protocolo mencionado, los fallos que pueden haber en la red son detectados además de dejar ciertos     componentes en un estado pendiente para darle mejor consistencia al sistema y así obtener buenos resultados
 
 2. Cassandra posee principalmente dos estrategias para mantener redundancia en la replicación de datos. ¿Cuáles son estos? 
 ¿Cuál es la ventaja de uno sobre otro? ¿Cuál utilizaría usted para en el caso actual y por qué? Justifique 
