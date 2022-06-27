@@ -28,7 +28,7 @@
     respuesta a pesar del fallo del nodo. Dado el protocolo mencionado, los fallos que pueden haber en la red son detectados además de dejar ciertos componentes en
     un estado pendiente para darle mejor consistencia al sistema y así obtener buenos resultados
 
-2. 2-Cassandra posee principalmente dos estrategias para mantener redundancia en la replicación de datos. ¿Cuáles son estos? 
+2. Cassandra posee principalmente dos estrategias para mantener redundancia en la replicación de datos. ¿Cuáles son estos? 
 ¿Cuál es la ventaja de uno sobre otro? ¿Cuál utilizaría usted para en el caso actual y por qué? Justifique 
 apropiadamente su respuesta.
 
