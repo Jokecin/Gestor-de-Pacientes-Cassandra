@@ -2,13 +2,17 @@
 
 ## Integrantes 
 
+
 - Matías Araya
 - Javier Romo
 
+
 ## Comandos 
 
-- git clone "url"
+
+- git clone "(https://github.com/joke1317/Tarea3SD)"
 - docker-compose up -d
+
 
 
 ## Preguntas
