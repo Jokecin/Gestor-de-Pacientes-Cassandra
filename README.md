@@ -20,7 +20,7 @@ Este proyecto implementa un sistema de gestión de datos utilizando Apache Cassa
 
 Clonar el repositorio:
 ```bash
-git clone "https://github.com/joke1317/Tarea3SD"
+git clone "https://github.com/joke1317/Gestor-de-Pacientes-Cassandra"
 ```
 
 Levantar el sistema con Docker Compose:
