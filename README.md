@@ -1,54 +1,56 @@
-# Tarea3 SD
+# Sistema de Gestión de Datos con Cassandra para Contextos Hospitalarios
+*Tarea 3 - Sistemas Distribuidos*
 
-## Integrantes 
 
+## Descripción del Proyecto
+
+Este proyecto implementa un sistema de gestión de datos utilizando Apache Cassandra, diseñado para manejar eficazmente grandes volúmenes de información en un contexto hospitalario. Utiliza Docker para facilitar la configuración y el despliegue del entorno de Cassandra y una API REST para interactuar con la base de datos.
+
+## Integrantes
 
 - Matías Araya
 - Javier Romo
 
+## Estructura del Proyecto
 
-## Comandos 
+- `Cassandra/`: Contiene los scripts y configuraciones específicas para la base de datos Cassandra y la API.
+- `docker-compose.yaml`: Define los servicios, configuraciones y volúmenes necesarios para el despliegue del sistema usando Docker.
 
+## Comandos para Iniciar el Proyecto
 
-- git clone "(https://github.com/joke1317/Tarea3SD)"
-- docker-compose up -d
+Clonar el repositorio:
+```bash
+git clone "https://github.com/joke1317/Tarea3SD"
+```
 
+Levantar el sistema con Docker Compose:
+```bash
+docker-compose up -d
+```
 
+## Uso del Sistema
 
-## Preguntas
+Una vez desplegado el sistema, se puede acceder a la interfaz de Cassandra a través de su API en el puerto `3000` para realizar las siguientes operaciones:
 
-1. Explique la arquitectura que Cassandra maneja. Cuando se crea el cluster ¿Como los nodos se conectan? 
-¿Qué ocurre cuando un cliente realiza una petición a uno de los nodos? ¿Qué ocurre cuando uno de los nodos se desconecta? 
-¿La red generada entre los nodos siempre es eficiente? ¿Existe balanceo de carga?
+### Tipos de Operaciones
 
-    La arquitectura empleada por Cassandra corresponde a la peer to peer conectado en forma de anillo de forma que se distribuyen los datos de una forma 
-    homogénea con la ayuda de un balanceador de carga, haciendola tolerante a fallos, además estos nodos se comunican a través de sus vecinos mediante el uso 
-    del protocolo Gossip, por lo cual suele ser eficiente. Cuando un cliente ejerce una petición a un nodo, este actúa como coordinador de dicha petición para poder       ejecutarla, si este nodo en especifico se desconecta cassandra asigna otro nodo dentro del cluster como coordinador para esta misma consulta, de forma que la           petición tenga una respuesta a pesar del fallo del nodo. Dado el protocolo mencionado, los fallos que pueden haber en la red son detectados además de dejar ciertos     componentes en un estado pendiente para darle mejor consistencia al sistema y así obtener buenos resultados
+- **Crear (`POST /create`)**: Inserta un nuevo paciente y una receta asociada si el paciente no existe previamente.
+- **Editar (`POST /edit`)**: Actualiza una receta existente con nueva información.
+- **Eliminar (`POST /delete`)**: Elimina una receta existente.
 
-2. Cassandra posee principalmente dos estrategias para mantener redundancia en la replicación de datos. ¿Cuáles son estos? 
-¿Cuál es la ventaja de uno sobre otro? ¿Cuál utilizaría usted para en el caso actual y por qué? Justifique 
-apropiadamente su respuesta.
+Estas operaciones permiten gestionar los datos de pacientes y recetas en el sistema de manera eficiente y segura.
 
-    La diferencia principal de ambas estrategias  es el número de data centers que se presentan en la estructura, estas estrategias
-    se denominan como NetworkTopologyStrategy y SimpleStrategy.
-    Con la primera estrategia se tiene multiples data centers, por lo cual se recomienda que su uso sea para sistemas 
-    de gran embergadura y una gran cantidad de datos, cabe destacar además que estos data centers son creados de forma separada
-    y en conjunto con replicas independientes asociadas a cada uno de estos data centers.
-    Por otro lado se tiene SimpleStrategy que de forma contraria a la estrategia anterior esta tiene un solo data center y de
-    él se desprenden multiples nodos en conjuntos con sus respectivos racks.
-    Para el caso tratado en esta tarea se recomendaría el uso de SimpleStrategy dado que el sistema es de poca complejidad 
-    y posee una cantidad de datos baja en comparación con grandes sistemas que existen en la actualidad.
+## Preguntas y Respuestas sobre la Arquitectura y Datos
 
-3. Teniendo en cuenta el contexto del problema ¿Usted cree que la solución propuesta es la correcta? 
-¿Qué ocurre cuando se quiere escalar en la solución? ¿Qué mejoras implementaria? 
-Oriente su respuesta hacia el Sharding (la replicación/distribución de los datos) y comente una estrategia que 
-podría seguir para ordenar los datos.
+1. **¿Cómo se maneja la arquitectura en Cassandra y cómo se conectan los nodos al crear un cluster?**
+   - Apache Cassandra utiliza una arquitectura distribuida sin puntos únicos de falla. Los nodos en un clúster de Cassandra operan en un modelo peer-to-peer en lugar de un modelo maestro-esclavo. Cuando se crea un clúster, cada nodo se comunica con otros nodos utilizando el protocolo Gossip para intercambiar información de estado sobre sí mismos y otros nodos en un clúster de forma periódica y asincrónica. Esta arquitectura permite una alta disponibilidad y tolerancia a fallos, asegurando que no haya interrupciones en el servicio incluso si un nodo falla.
 
-    La solución planteada si es la correcta dado que se tienen multiples nodos independientes que se comunican con una API REST
-    para hacer el procesamiento, y tratandose de un contexto de hospital y que las consultas son relativamente 
-    sencillas el uso de cassandra es apropiado. Para el tema de la escalabilidad las técnicas clásicas 
-    (caché, particionamiento, replicación) funcionan de buena manera dado que cassandra es escalable tanto horizontal como 
-    verticalmente, sin embargo para este caso en particular se debe hacer más enfoque en la replicación de los nodos dentro 
-    del cluster haciendo replicas de cada nodo según su funcionalidad dando así una tolerancia a fallos al sistema y homogeneidad
-    a los datos, tomando en cuenta que la estrategía que se recomendó para esta ocasión fue la de "SympleStrategy"
-    
+2. **¿Cuáles son las estrategias de replicación en Cassandra y cuál es su ventaja?**
+   - Cassandra ofrece dos principales estrategias de replicación: `SimpleStrategy` y `NetworkTopologyStrategy`. `SimpleStrategy` se utiliza para ambientes de desarrollo o en clústeres de un solo datacenter, donde replica los datos en múltiples nodos dentro del mismo datacenter. Por otro lado, `NetworkTopologyStrategy` se emplea en entornos de producción o en clústeres con múltiples datacenters, donde permite configurar la replicación de datos de manera más granular a través de datacenters, lo que mejora significativamente la disponibilidad y resistencia del sistema en geografías múltiples.
+
+3. **¿La solución propuesta es adecuada para el contexto? ¿Qué mejoras se podrían implementar?**
+   - La solución propuesta es adecuada dado que Cassandra es altamente escalable y se maneja bien bajo grandes volúmenes de lectura y escritura, lo cual es típico en un contexto hospitalario con altos requerimientos de disponibilidad y acceso rápido a datos críticos. Para mejorar aún más, se podría considerar el uso de técnicas avanzadas como la compresión de datos, la utilización de cachés de consulta y la optimización de las consultas CQL para reducir la latencia y aumentar el rendimiento. Además, implementar un monitoreo y alertas proactivas sobre la salud del clúster y el rendimiento ayudaría a mantener la estabilidad y prevenir posibles fallos.
+
+## Contribuciones y Mejoras
+
+Este proyecto es abierto a contribuciones. Las sugerencias de mejoras, reporte de errores y pull requests son bienvenidos.
